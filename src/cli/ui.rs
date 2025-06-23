@@ -59,7 +59,7 @@ impl App {
 
         let prayer_map = today.to_hash_map();
 
-        // Check each prayer in order
+        
         for prayer in Prayer::all_prayers() {
             let prayer_time = prayer_map.get(&prayer).unwrap();
 
@@ -68,7 +68,7 @@ impl App {
             }
         }
 
-        // If no prayer today, return tomorrow's Fajr (or first prayer of next day)
+        
         Some((Prayer::Fajr, today.fajr))
     }
 
@@ -81,14 +81,14 @@ impl App {
         let (_, next_prayer_time) = next_prayer.unwrap();
 
         let timezone_now = self.get_timezone_now();
-        // Calculate the difference in seconds
+        
         let now_seconds = timezone_now.num_seconds_from_midnight() as i64;
         let prayer_seconds = next_prayer_time.num_seconds_from_midnight() as i64;
 
         let diff_seconds = if prayer_seconds >= now_seconds {
             prayer_seconds - now_seconds
         } else {
-            // Next day's prayer (add 24 hours)
+            
             (24 * 60 * 60) - now_seconds + prayer_seconds
         };
 
@@ -105,14 +105,14 @@ impl App {
 }
 
 pub fn entry(data: ParsedPrayerTimesResponse) -> Result<(), Box<dyn std::error::Error>> {
-    // Setup terminal
+    
     enable_raw_mode()?;
     let mut stdout = io::stdout();
     execute!(stdout, EnterAlternateScreen, EnableMouseCapture)?;
     let backend = CrosstermBackend::new(stdout);
     let mut terminal = Terminal::new(backend)?;
 
-    // Create app and run it
+    
     let app = App {
         prayer_times: data,
         should_quit: false,
@@ -120,7 +120,7 @@ pub fn entry(data: ParsedPrayerTimesResponse) -> Result<(), Box<dyn std::error::
 
     let res = run_app(&mut terminal, app);
 
-    // Restore terminal
+    
     disable_raw_mode()?;
     execute!(
         terminal.backend_mut(),
@@ -203,7 +203,7 @@ pub fn draw_header(frame: &mut Frame, rect: &Rect, app: &mut App) {
         .title("Current Date")
         .title_alignment(Alignment::Center)
         .borders(Borders::ALL)
-        .border_style(Style::new().cyan()); // Changed from blue to cyan
+        .border_style(Style::new().cyan()); 
 
     let full_date = app.prayer_times.items[0].date.format("%D").to_string();
     let hour = app.get_timezone_now().format("%-I:%M %p").to_string();
@@ -216,7 +216,7 @@ pub fn draw_header(frame: &mut Frame, rect: &Rect, app: &mut App) {
     let widget = Paragraph::new(text)
         .alignment(Alignment::Center)
         .block(block)
-        .style(Style::new().yellow()); // Changed from white to yellow for better visibility
+        .style(Style::new().yellow()); 
 
     frame.render_widget(widget, *rect);
 }
