@@ -14,11 +14,14 @@ pub struct ParsedPrayerTimesResponse {
 
 pub struct ParsedLocation {
     pub state: String,
+    pub city:String,
     pub country: String,
+    pub timezone: i8,
+    pub daylight: bool,
     pub country_code: String,
-    pub qibla_direction: Option<f64>,
-    pub latitude: Option<f64>,
-    pub longitude: Option<f64>,
+    pub qibla_direction: f64,
+    pub latitude: f64,
+    pub longitude: f64,
 }
 
 #[derive(Debug, Clone)]
@@ -107,12 +110,10 @@ impl ParsedLocation {
         y.floor() as u32
     }
     pub fn get_tile(&self) -> Option<String> {
-        if self.longitude.is_none() || self.latitude.is_none() {
-            return None;
-        }
 
-        let longitude = self.longitude.unwrap();
-        let latitude = self.latitude.unwrap();
+
+        let longitude = self.longitude;
+        let latitude = self.latitude;
 
         let zoom: u32 = 12;
 

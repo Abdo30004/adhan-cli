@@ -40,8 +40,6 @@ impl FromStr for PrayerTimesPeriod {
     }
 }
 
-
-
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct PrayerTimeItem {
     pub date_for: String,
@@ -61,14 +59,14 @@ pub struct PrayerTimesResponse {
     pub for_period: String,
     pub method: i32,
     pub prayer_method_name: String,
-    pub daylight: String,
-    pub timezone: String,
+    pub daylight: i32,
+    pub timezone: i8,
     pub map_image: String,
-    pub sealevel: String,
+    pub sealevel: i32,
     pub link: String,
-    pub qibla_direction: String,
-    pub latitude: String,
-    pub longitude: String,
+    pub qibla_direction: f64,
+    pub latitude: f64,
+    pub longitude: f64,
     pub address: String,
     pub city: String,
     pub state: String,
@@ -98,10 +96,13 @@ impl PrayerTimesResponse {
         ParsedLocation {
             country: self.country.clone(),
             state: self.state.clone(),
+            city:self.city.clone(),
             country_code: self.country_code.clone(),
-            latitude: self.latitude.parse().ok(),
-            longitude: self.longitude.parse().ok(),
-            qibla_direction: self.qibla_direction.parse().ok(),
+            latitude: self.latitude,
+            longitude: self.longitude,
+            qibla_direction: self.qibla_direction,
+            timezone: self.timezone,
+            daylight: self.daylight == 1,
         }
     }
 }
