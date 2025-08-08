@@ -4,7 +4,7 @@ use crate::api::responses::PrayerTimesPeriod;
 use super::responses::PrayerTimesResponse;
 use regex;
 use reqwest;
-use serde;
+
 
 pub async fn get_prayer_data_by_city(
     city: &str,
@@ -21,7 +21,7 @@ pub async fn get_prayer_data_by_city(
 
     let response_text = response.text().await?;
 
-    let regex_m = regex::Regex::new(r#""-?(\d+(?:\.\d+)?)""#).unwrap(); // fix problem of api response types
+    let regex_m = regex::Regex::new(r#""(-?\d+(?:\.\d+)?)""#).unwrap(); // fix problem of api response types
 
     let response_text = regex_m.replace_all(&response_text, "$1");
 
